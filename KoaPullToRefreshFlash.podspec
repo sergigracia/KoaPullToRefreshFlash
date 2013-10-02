@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
   
   s.source_files = 'KoaPullToRefreshFlash/*.{h,m}'
   s.public_header_files = 'KoaPullToRefreshFlash/*.h'
-  s.dependency = 'FontAwesome+iOS'
+  s.dependency 'FontAwesome+iOS'
   s.requires_arc = true
 end
