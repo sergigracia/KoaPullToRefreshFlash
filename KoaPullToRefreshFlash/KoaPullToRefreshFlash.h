@@ -1,6 +1,6 @@
 //
-//  KoaPullToRefresh.h
-//  KoaPullToRefresh
+//  KoaPullToRefreshFlash.h
+//  KoaPullToRefreshFlash
 //
 //  Created by Sergi Gracia on 09/05/13.
 //  Copyright (c) 2013 Sergi Gracia. All rights reserved.
@@ -11,20 +11,20 @@
 #import "NSString+FontAwesome.h"
 #import "UIFont+FontAwesome.h"
 
-@class KoaPullToRefreshView;
+@class KoaPullToRefreshFlashView;
 
-@interface UIScrollView (KoaPullToRefresh)
+@interface UIScrollView (KoaPullToRefreshFlash)
 
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler;
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler withBackgroundColor:(UIColor *)customBackgroundColor;
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler withBackgroundColor:(UIColor *)customBackgroundColor withPullToRefreshHeightShowed:(CGFloat)pullToRefreshHeightShowed;
 
-@property (nonatomic, strong) KoaPullToRefreshView *pullToRefreshView;
+@property (nonatomic, strong) KoaPullToRefreshFlashView *pullToRefreshView;
 @property (nonatomic, assign) BOOL showsPullToRefresh;
 
 @end
 
-@interface KoaPullToRefreshView : UIView
+@interface KoaPullToRefreshFlashView : UIView
 
 @property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, strong) UIFont *textFont;

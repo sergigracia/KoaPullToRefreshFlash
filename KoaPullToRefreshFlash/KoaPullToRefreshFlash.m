@@ -1,22 +1,22 @@
 //
-//  KoaPullToRefresh.m
-//  KoaPullToRefresh
+//  KoaPullToRefreshFlash.m
+//  KoaPullToRefreshFlash
 //
 //  Created by Sergi Gracia on 09/05/13.
 //  Copyright (c) 2013 Sergi Gracia. All rights reserved.
 //
 
-#import "KoaPullToRefresh.h"
+#import "KoaPullToRefreshFlash.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define fequal(a,b) (fabs((a) - (b)) < FLT_EPSILON)
 #define fequalzero(a) (fabs(a) < FLT_EPSILON)
 
-static CGFloat KoaPullToRefreshViewHeight = 60;
-static CGFloat KoaPullToRefreshViewHeightShowed = 0;
-static CGFloat KoaPullToRefreshViewTitleBottomMargin = 12;
+static CGFloat KoaPullToRefreshFlashViewHeight = 60;
+static CGFloat KoaPullToRefreshFlashViewHeightShowed = 0;
+static CGFloat KoaPullToRefreshFlashViewTitleBottomMargin = 12;
 
-@interface KoaPullToRefreshView ()
+@interface KoaPullToRefreshFlashView ()
 
 @property (nonatomic, copy) void (^pullToRefreshActionHandler)(void);
 @property (nonatomic, strong, readwrite) UILabel *titleLabel;
@@ -35,12 +35,12 @@ static CGFloat KoaPullToRefreshViewTitleBottomMargin = 12;
 
 @end
 
-#pragma mark - UIScrollView (KoaPullToRefresh)
+#pragma mark - UIScrollView (KoaPullToRefreshFlash)
 #import <objc/runtime.h>
 
 static char UIScrollViewPullToRefreshView;
 
-@implementation UIScrollView (KoaPullToRefresh)
+@implementation UIScrollView (KoaPullToRefreshFlash)
 @dynamic pullToRefreshView, showsPullToRefresh;
 
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler {
@@ -49,32 +49,32 @@ static char UIScrollViewPullToRefreshView;
 
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler
                   withBackgroundColor:(UIColor *)customBackgroundColor {
-    [self addPullToRefreshWithActionHandler:actionHandler withBackgroundColor:customBackgroundColor withPullToRefreshHeightShowed:KoaPullToRefreshViewHeightShowed];
+    [self addPullToRefreshWithActionHandler:actionHandler withBackgroundColor:customBackgroundColor withPullToRefreshHeightShowed:KoaPullToRefreshFlashViewHeightShowed];
 }
 
 - (void)addPullToRefreshWithActionHandler:(void (^)(void))actionHandler
                       withBackgroundColor:(UIColor *)customBackgroundColor
             withPullToRefreshHeightShowed:(CGFloat)pullToRefreshHeightShowed {
     
-    //KoaPullToRefreshViewHeight = pullToRefreshHeight;
-    KoaPullToRefreshViewHeightShowed = pullToRefreshHeightShowed;
-    KoaPullToRefreshViewTitleBottomMargin += pullToRefreshHeightShowed;
+    //KoaPullToRefreshFlashViewHeight = pullToRefreshHeight;
+    KoaPullToRefreshFlashViewHeightShowed = pullToRefreshHeightShowed;
+    KoaPullToRefreshFlashViewTitleBottomMargin += pullToRefreshHeightShowed;
     
-    [self setContentInset:UIEdgeInsetsMake(KoaPullToRefreshViewHeightShowed, self.contentInset.left, self.contentInset.bottom, self.contentInset.right)];
+    [self setContentInset:UIEdgeInsetsMake(KoaPullToRefreshFlashViewHeightShowed, self.contentInset.left, self.contentInset.bottom, self.contentInset.right)];
     
     if (!self.pullToRefreshView) {
         
         //Initial y position
-        CGFloat yOrigin = -KoaPullToRefreshViewHeight;
+        CGFloat yOrigin = -KoaPullToRefreshFlashViewHeight;
         
         //Put background extra to fill top white space
-        UIView *backgroundExtra = [[UIView alloc] initWithFrame:CGRectMake(0, -KoaPullToRefreshViewHeight*8, self.bounds.size.width, KoaPullToRefreshViewHeight*8)];
+        UIView *backgroundExtra = [[UIView alloc] initWithFrame:CGRectMake(0, -KoaPullToRefreshFlashViewHeight*8, self.bounds.size.width, KoaPullToRefreshFlashViewHeight*8)];
         [backgroundExtra setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [backgroundExtra setBackgroundColor:customBackgroundColor];
         [self addSubview:backgroundExtra];
         
         //Init pull to refresh view
-        KoaPullToRefreshView *view = [[KoaPullToRefreshView alloc] initWithFrame:CGRectMake(0, yOrigin, self.bounds.size.width, KoaPullToRefreshViewHeight + KoaPullToRefreshViewHeightShowed)];
+        KoaPullToRefreshFlashView *view = [[KoaPullToRefreshFlashView alloc] initWithFrame:CGRectMake(0, yOrigin, self.bounds.size.width, KoaPullToRefreshFlashViewHeight + KoaPullToRefreshFlashViewHeightShowed)];
         view.pullToRefreshActionHandler = actionHandler;
         view.scrollView = self;
         view.backgroundColor = customBackgroundColor;
@@ -88,15 +88,15 @@ static char UIScrollViewPullToRefreshView;
     }
 }
 
-- (void)setPullToRefreshView:(KoaPullToRefreshView *)pullToRefreshView {
-    [self willChangeValueForKey:@"KoaPullToRefreshView"];
+- (void)setPullToRefreshView:(KoaPullToRefreshFlashView *)pullToRefreshView {
+    [self willChangeValueForKey:@"KoaPullToRefreshFlashView"];
     objc_setAssociatedObject(self, &UIScrollViewPullToRefreshView,
                              pullToRefreshView,
                              OBJC_ASSOCIATION_ASSIGN);
-    [self didChangeValueForKey:@"KoaPullToRefreshView"];
+    [self didChangeValueForKey:@"KoaPullToRefreshFlashView"];
 }
 
-- (KoaPullToRefreshView *)pullToRefreshView {
+- (KoaPullToRefreshFlashView *)pullToRefreshView {
     return objc_getAssociatedObject(self, &UIScrollViewPullToRefreshView);
 }
 
@@ -117,8 +117,8 @@ static char UIScrollViewPullToRefreshView;
             [self addObserver:self.pullToRefreshView forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
             self.pullToRefreshView.isObserving = YES;
             
-            CGFloat yOrigin = -KoaPullToRefreshViewHeight;
-            self.pullToRefreshView.frame = CGRectMake(0, yOrigin, self.bounds.size.width, KoaPullToRefreshViewHeight + KoaPullToRefreshViewHeightShowed);
+            CGFloat yOrigin = -KoaPullToRefreshFlashViewHeight;
+            self.pullToRefreshView.frame = CGRectMake(0, yOrigin, self.bounds.size.width, KoaPullToRefreshFlashViewHeight + KoaPullToRefreshFlashViewHeightShowed);
         }
     }
 }
@@ -130,8 +130,8 @@ static char UIScrollViewPullToRefreshView;
 @end
 
 
-#pragma mark - KoaPullToRefresh
-@implementation KoaPullToRefreshView
+#pragma mark - KoaPullToRefreshFlash
+@implementation KoaPullToRefreshFlashView
 
 @synthesize pullToRefreshActionHandler, textColor, textFont;
 @synthesize scrollView = _scrollView;
@@ -159,7 +159,7 @@ static char UIScrollViewPullToRefreshView;
         UIScrollView *scrollView = (UIScrollView *)self.superview;
         if (scrollView.showsPullToRefresh) {
             if (self.isObserving) {
-                //If enter this branch, it is the moment just before "KoaPullToRefreshView's dealloc", so remove observer here
+                //If enter this branch, it is the moment just before "KoaPullToRefreshFlashView's dealloc", so remove observer here
                 [scrollView removeObserver:self forKeyPath:@"contentOffset"];
                 [scrollView removeObserver:self forKeyPath:@"contentSize"];
                 [scrollView removeObserver:self forKeyPath:@"frame"];
@@ -180,7 +180,7 @@ static char UIScrollViewPullToRefreshView;
     
     //Set title frame
     CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font constrainedToSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight) lineBreakMode:self.titleLabel.lineBreakMode];
-    CGFloat titleY = KoaPullToRefreshViewHeight/2 - titleSize.height/2;
+    CGFloat titleY = KoaPullToRefreshFlashViewHeight/2 - titleSize.height/2;
     
     [self.titleLabel setFrame:CGRectIntegral(CGRectMake(0, titleY, self.frame.size.width, titleSize.height))];
 }
@@ -218,8 +218,8 @@ static char UIScrollViewPullToRefreshView;
         [self layoutSubviews];
         
         CGFloat yOrigin;
-        yOrigin = -KoaPullToRefreshViewHeight;
-        self.frame = CGRectMake(0, yOrigin, self.bounds.size.width, KoaPullToRefreshViewHeight);
+        yOrigin = -KoaPullToRefreshFlashViewHeight;
+        self.frame = CGRectMake(0, yOrigin, self.bounds.size.width, KoaPullToRefreshFlashViewHeight);
     }
     else if([keyPath isEqualToString:@"frame"])
         [self layoutSubviews];
@@ -229,17 +229,17 @@ static char UIScrollViewPullToRefreshView;
     
     //Change title label alpha
     NSLog(@"Offset: %f", contentOffset.y);
-    if (contentOffset.y < -(KoaPullToRefreshViewHeight/2)) {
-        NSLog(@"Alpha: %f", abs(contentOffset.y + (KoaPullToRefreshViewHeight/2)) / (KoaPullToRefreshViewHeight/2));
-        CGFloat alpha = abs(contentOffset.y + (KoaPullToRefreshViewHeight/2)) / (KoaPullToRefreshViewHeight/2);
+    if (contentOffset.y < -(KoaPullToRefreshFlashViewHeight/2)) {
+        NSLog(@"Alpha: %f", abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2));
+        CGFloat alpha = abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2);
         [self.titleLabel setAlpha: alpha];
     }else{
         [self.titleLabel setAlpha: 0];
     }
     
-    if (self.scrollView.contentOffset.y == -KoaPullToRefreshViewHeightShowed) {
+    if (self.scrollView.contentOffset.y == -KoaPullToRefreshFlashViewHeightShowed) {
         self.releaseComplete = NO;
-    }else if (self.scrollView.contentOffset.y <= -KoaPullToRefreshViewHeight){
+    }else if (self.scrollView.contentOffset.y <= -KoaPullToRefreshFlashViewHeight){
         if (!self.releaseComplete) {
             pullToRefreshActionHandler();
             self.releaseComplete = YES;
