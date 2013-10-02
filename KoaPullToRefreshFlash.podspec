@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'KoaPullToRefreshFlash'
-  s.version  = '1.0.2'
+  s.version  = '1.0.3'
   s.platform = :ios, '6.0'
   s.license  = 'MIT'
   s.summary  = 'Minimal & easily customizable pull-to-refresh control.'
@@ -18,5 +18,6 @@ Pod::Spec.new do |s|
   
   s.source_files = 'KoaPullToRefreshFlash/*.{h,m}'
   s.public_header_files = 'KoaPullToRefreshFlash/*.h'
+  s.dependency = 'FontAwesome+iOS', :git => 'https://github.com/pepibumur/ios-fontawesome.git'
   s.requires_arc = true
 end
