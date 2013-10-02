@@ -147,8 +147,6 @@ static char UIScrollViewPullToRefreshView;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
         
-        self.title = NSLocalizedString(@"Release now", nil);
-        
         self.wasTriggeredByUser = YES;
     }
     return self;
@@ -174,9 +172,6 @@ static char UIScrollViewPullToRefreshView;
     CGFloat leftViewWidth = 60;
     CGFloat margin = 10;
     CGFloat labelMaxWidth = self.bounds.size.width - margin - leftViewWidth;
-    
-    //Set title text
-    self.titleLabel.text = self.title;
     
     //Set title frame
     CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font constrainedToSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight) lineBreakMode:self.titleLabel.lineBreakMode];
@@ -251,10 +246,9 @@ static char UIScrollViewPullToRefreshView;
 - (UILabel *)titleLabel {
     if(!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 210, 20)];
-        _titleLabel.text = NSLocalizedString(@"Pull",);
-        _titleLabel.font = [UIFont boldSystemFontOfSize:14];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = textColor;
+        
         [self addSubview:_titleLabel];
     }
     return _titleLabel;
