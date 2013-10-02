@@ -228,9 +228,7 @@ static char UIScrollViewPullToRefreshView;
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     
     //Change title label alpha
-    NSLog(@"Offset: %f", contentOffset.y);
     if (contentOffset.y < -(KoaPullToRefreshFlashViewHeight/2)) {
-        NSLog(@"Alpha: %f", abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2));
         CGFloat alpha = abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2);
         [self.titleLabel setAlpha: alpha];
     }else{
