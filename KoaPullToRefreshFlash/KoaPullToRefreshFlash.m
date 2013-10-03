@@ -234,7 +234,9 @@ static char UIScrollViewPullToRefreshView;
         self.releaseComplete = NO;
     }else if (self.scrollView.contentOffset.y <= -KoaPullToRefreshFlashViewHeight){
         if (!self.releaseComplete) {
-            pullToRefreshActionHandler();
+            if(self.scrollView.isDragging && !self.scrollView.isDecelerating){
+                pullToRefreshActionHandler();
+            }
             self.releaseComplete = YES;
         }
     }
