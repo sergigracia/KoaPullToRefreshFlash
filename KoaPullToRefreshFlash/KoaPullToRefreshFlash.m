@@ -60,7 +60,7 @@ static char UIScrollViewPullToRefreshView;
     KoaPullToRefreshFlashViewHeightShowed = pullToRefreshHeightShowed;
     KoaPullToRefreshFlashViewTitleBottomMargin += pullToRefreshHeightShowed;
     
-    [self setContentInset:UIEdgeInsetsMake(KoaPullToRefreshFlashViewHeightShowed, self.contentInset.left, self.contentInset.bottom, self.contentInset.right)];
+    [self setContentInset:UIEdgeInsetsMake(KoaPullToRefreshFlashViewHeightShowed + self.contentInset.top, self.contentInset.left, self.contentInset.bottom, self.contentInset.right)];
     
     if (!self.pullToRefreshView) {
         
