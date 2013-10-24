@@ -142,7 +142,7 @@ static char UIScrollViewPullToRefreshView;
     if(self = [super initWithFrame:frame]) {
         
         // default styling values
-        self.textColor = [UIColor darkGrayColor];
+        self.textColor = [UIColor colorWithRed:204/255.f green:204/255.f blue:204/255.f alpha:1];
         self.backgroundColor = [UIColor whiteColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
@@ -175,8 +175,7 @@ static char UIScrollViewPullToRefreshView;
     
     //Set title frame
     CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font constrainedToSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight) lineBreakMode:self.titleLabel.lineBreakMode];
-    CGFloat titleY = KoaPullToRefreshFlashViewHeight/2 - titleSize.height/2;
-    
+    CGFloat titleY = KoaPullToRefreshFlashViewHeight/2 - titleSize.height/2 + 10;
     [self.titleLabel setFrame:CGRectIntegral(CGRectMake(0, titleY, self.frame.size.width, titleSize.height))];
 }
 
@@ -211,6 +210,7 @@ static char UIScrollViewPullToRefreshView;
         [self scrollViewDidScroll:[[change valueForKey:NSKeyValueChangeNewKey] CGPointValue]];
     else if([keyPath isEqualToString:@"contentSize"]) {
         [self layoutSubviews];
+
         
         CGFloat yOrigin;
         yOrigin = -KoaPullToRefreshFlashViewHeight;
@@ -218,24 +218,45 @@ static char UIScrollViewPullToRefreshView;
     }
     else if([keyPath isEqualToString:@"frame"])
         [self layoutSubviews];
+
 }
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     
     //Change title label alpha
     if (contentOffset.y < -(KoaPullToRefreshFlashViewHeight/2)) {
-        CGFloat alpha = abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2);
-        [self.titleLabel setAlpha: alpha];
+        if (!self.releaseComplete) {
+            CGFloat alpha = abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2);
+            [self.titleLabel setAlpha: alpha];            
+        }
     }else{
+        //Restore the object
         [self.titleLabel setAlpha: 0];
     }
     
     if (self.scrollView.contentOffset.y == -KoaPullToRefreshFlashViewHeightShowed) {
+        [self layoutSubviews];
         self.releaseComplete = NO;
     }else if (self.scrollView.contentOffset.y <= -KoaPullToRefreshFlashViewHeight){
         if (!self.releaseComplete) {
             if(self.scrollView.isDragging && !self.scrollView.isDecelerating){
+                
                 pullToRefreshActionHandler();
+                
+                //Animate the arrow
+                [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
+                    self.titleLabel.transform = CGAffineTransformRotate(self.titleLabel.transform, 3.14159265);
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationCurveEaseInOut animations:^{
+                        CGRect frame= self.titleLabel.frame;
+                        frame.origin.y = frame.origin.y - 80;
+                        self.titleLabel.frame = frame;
+                        self.titleLabel.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        //Restore rotation
+                        self.titleLabel.transform = CGAffineTransformRotate(self.titleLabel.transform, 3.14159265);
+                    }];
+                }];
             }
             self.releaseComplete = YES;
         }
@@ -250,6 +271,8 @@ static char UIScrollViewPullToRefreshView;
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 210, 20)];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = textColor;
+        _titleLabel.font = [UIFont fontWithName:kFontAwesomeFamilyName size:21];
+        _titleLabel.text = [NSString fontAwesomeIconStringForIconIdentifier:@"icon-arrow-down"];
         
         [self addSubview:_titleLabel];
     }
@@ -263,6 +286,7 @@ static char UIScrollViewPullToRefreshView;
 - (UIFont *)textFont {
     return self.titleLabel.font;
 }
+
 
 #pragma mark - Setters
 
