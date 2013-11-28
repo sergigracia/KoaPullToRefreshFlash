@@ -222,9 +222,7 @@ static char UIScrollViewPullToRefreshView;
 }
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
-    
-    NSLog(@"OFFSET: %f",contentOffset.y);
-    
+        
     //Change title label alpha
     if (contentOffset.y + self.originalTopInset < -(KoaPullToRefreshFlashViewHeight/2)) {
         if (!self.releaseComplete) {
