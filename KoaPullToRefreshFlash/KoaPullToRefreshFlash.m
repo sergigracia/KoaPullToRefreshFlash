@@ -223,10 +223,12 @@ static char UIScrollViewPullToRefreshView;
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
     
+    NSLog(@"OFFSET: %f",contentOffset.y);
+    
     //Change title label alpha
-    if (contentOffset.y < -(KoaPullToRefreshFlashViewHeight/2)) {
+    if (contentOffset.y + self.originalTopInset < -(KoaPullToRefreshFlashViewHeight/2)) {
         if (!self.releaseComplete) {
-            CGFloat alpha = abs(contentOffset.y + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2);
+            CGFloat alpha = abs(contentOffset.y + self.originalTopInset + (KoaPullToRefreshFlashViewHeight/2)) / (KoaPullToRefreshFlashViewHeight/2);
             [self.titleLabel setAlpha: alpha];            
         }
     }else{
@@ -234,10 +236,10 @@ static char UIScrollViewPullToRefreshView;
         [self.titleLabel setAlpha: 0];
     }
     
-    if (self.scrollView.contentOffset.y == -KoaPullToRefreshFlashViewHeightShowed) {
+    if (self.scrollView.contentOffset.y + self.originalTopInset == -KoaPullToRefreshFlashViewHeightShowed) {
         [self layoutSubviews];
         self.releaseComplete = NO;
-    }else if (self.scrollView.contentOffset.y <= -KoaPullToRefreshFlashViewHeight){
+    }else if (self.scrollView.contentOffset.y + self.originalTopInset <= -KoaPullToRefreshFlashViewHeight){
         if (!self.releaseComplete) {
             if(self.scrollView.isDragging && !self.scrollView.isDecelerating){
                 
