@@ -106,7 +106,7 @@ static char UIScrollViewPullToRefreshView;
     if(!showsPullToRefresh) {
         if (self.pullToRefreshView.isObserving) {
             [self removeObserver:self.pullToRefreshView forKeyPath:@"contentOffset"];
-            [self removeObserver:self.pullToRefreshView forKeyPath:@"frame"];
+            
             [self.pullToRefreshView resetScrollViewContentInset];
             self.pullToRefreshView.isObserving = NO;
         }
@@ -114,7 +114,6 @@ static char UIScrollViewPullToRefreshView;
         if (!self.pullToRefreshView.isObserving) {
             [self addObserver:self.pullToRefreshView forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
             [self addObserver:self.pullToRefreshView forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
-            [self addObserver:self.pullToRefreshView forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
             self.pullToRefreshView.isObserving = YES;
             
             CGFloat yOrigin = -KoaPullToRefreshFlashViewHeight;
@@ -160,7 +159,6 @@ static char UIScrollViewPullToRefreshView;
                 //If enter this branch, it is the moment just before "KoaPullToRefreshFlashView's dealloc", so remove observer here
                 [scrollView removeObserver:self forKeyPath:@"contentOffset"];
                 [scrollView removeObserver:self forKeyPath:@"contentSize"];
-                [scrollView removeObserver:self forKeyPath:@"frame"];
                 self.isObserving = NO;
             }
         }
@@ -262,7 +260,6 @@ static char UIScrollViewPullToRefreshView;
         }
     }
 }
-
 
 #pragma mark - Getters
 
